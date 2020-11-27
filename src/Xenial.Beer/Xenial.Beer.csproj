@@ -1,0 +1,10 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <RootNamespace>Xenial.Delicious.Beer</RootNamespace>
+    <PackageId>Xenial.Beer</PackageId>
+    <PackageDescription>Beer - Delicious dotnet build tools</PackageDescription>
+  </PropertyGroup>
+
+</Project>

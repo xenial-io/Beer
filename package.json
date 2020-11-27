@@ -1,0 +1,49 @@
+{
+  "name": "Beer",
+  "version": "0.0.1",
+  "description": "Beer - Delicious dotnet console",
+  "main": "index.js",
+  "scripts": {
+    "c": "git-cz",
+    "record": "terminalizer record artifacts/record",
+    "play": "terminalizer play artifacts/record",
+    "render": "terminalizer render artifacts/record -o artifacts/record.gif"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xenial-io/Beer.git"
+  },
+  "keywords": [
+    "dotnet",
+    "console",
+    "terminal",
+    "GUI",
+    "framework"
+  ],
+  "author": "Xenial, Manuel Grundner",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/xenial-io/Beer/issues"
+  },
+  "homepage": "https://github.com/xenial-io/Beer#readme",
+  "devDependencies": {
+    "@commitlint/cli": "^9.1.2",
+    "@commitlint/config-conventional": "^10.0.0",
+    "commitizen": "^4.1.5",
+    "cz-conventional-changelog": "^3.2.0",
+    "dot-prop": "^5.2.0",
+    "husky": "^4.2.5",
+    "terminalizer": "^0.7.2"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-push": "dotnet run --project build/build.csproj"
+    }
+  }
+}
