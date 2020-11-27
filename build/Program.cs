@@ -101,10 +101,9 @@ namespace Xenial.Build
                 }
             });
 
-            Target("release", async () =>
-            {
-                await Release();
-            });
+            Target("release",
+                () => Release()
+            );
 
             Target("default", DependsOn("test"));
 

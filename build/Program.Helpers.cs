@@ -7,9 +7,9 @@ using static SimpleExec.Command;
 
 namespace Xenial.Build
 {
-    static partial class Program
+    internal static partial class Program
     {
-        static (string fullFramework, string netcore) FindTfms()
+        public static (string fullFramework, string netcore) FindTfms()
         {
             var dirProps = XElement.Load("Directory.Build.props");
             var props = dirProps.Descendants("PropertyGroup");
@@ -18,7 +18,7 @@ namespace Xenial.Build
             return (fullFramework, netcore);
         }
 
-        async static Task EnsureTools()
+        public static async Task EnsureTools()
         {
             try
             {
@@ -31,9 +31,9 @@ namespace Xenial.Build
             }
         }
 
-        static string Tabify(string s)
+        public static string Tabify(string s)
             => string.Join(
-                Environment.NewLine, 
+                Environment.NewLine,
                 s.Split("\n").Select(s => $"\t{s}")
             );
     }
