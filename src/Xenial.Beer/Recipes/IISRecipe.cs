@@ -42,7 +42,7 @@ namespace Xenial.Delicious.Beer.Recipes
                 async () => await RunAsync("dotnet", $"msbuild {options.PathToCsproj} /t:Restore;Build /p:Configuration={options.Configuration} /p:RuntimeIdentifier={options.RuntimeIdentifier} /p:SelfContained={options.SelfContained} /p:PackageAsSingleFile={options.PackageAsSingleFile} /p:DeployOnBuild=true /p:WebPublishMethod=package /p:PublishProfile=Package /v:minimal /p:DesktopBuildPackageLocation={options.Artifact} /p:DeployIisAppPath={options.PackageName} /p:DefaultConnectionString=\"{await options.GetConnectionString()}\" {await assemblyProperties()}")
             );
 
-            Target($"deploy{postfix}", DependsOn($"publish:{postfix}"),
+            Target($"deploy{postfix}", DependsOn($"publish{postfix}"),
                 async () => await RunAsync("cmd.exe", $"/C {options.ProjectName}.deploy.cmd /Y /M:{await options.GetWebdeployIP()} /U:{await options.GetWebdeployUser()} /P:{await options.GetWebdeployPass()} -allowUntrusted -enableRule:AppOffline", workingDirectory: options.ArtifactsLocation)
             );
 
