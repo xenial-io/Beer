@@ -32,9 +32,12 @@ namespace Xenial.Build
         }
 
         public static string Tabify(string s)
-            => string.Join(
-                Environment.NewLine,
-                s.Split("\n").Select(s => $"\t{s}")
-            );
+        {
+            s = s ?? string.Empty;
+            return string.Join(
+                           Environment.NewLine,
+                           s.Split("\n").Select(s => $"\t{s}")
+                       );
+        }
     }
 }

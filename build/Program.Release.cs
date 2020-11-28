@@ -154,6 +154,10 @@ namespace Xenial.Build
             Header("Maximum version");
             var version = versions.Max();
             LogVerbose(version?.ToString());
+            if (version == null)
+            {
+                version = new Version(0, 0, 0);
+            }
             return Task.FromResult(version);
         }
 
