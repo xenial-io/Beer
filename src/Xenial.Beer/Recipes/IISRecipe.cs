@@ -43,7 +43,7 @@ namespace Xenial.Delicious.Beer.Recipes
             );
 
             Target($"deploy{postfix}", DependsOn($"publish{postfix}"),
-                async () => await RunAsync("cmd.exe", $"/C {options.ProjectName}.deploy.cmd /Y /M:{await options.GetWebdeployIP()} /U:{await options.GetWebdeployUser()} /P:{await options.GetWebdeployPass()} -allowUntrusted -enableRule:AppOffline", workingDirectory: options.ArtifactsLocation)
+                async () => await RunAsync("cmd.exe", $"/C {options.ProjectName}.deploy.cmd /Y /M:{await options.GetWebdeployIP()} /U:{await options.GetWebdeployUser()} /P:{await options.GetWebdeployPass()} -allowUntrusted -enableRule:AppOffline", workingDirectory: options.WebdeployArtifactsLocation)
             );
 
             static async Task<string> ReadToolAsync(Func<Task<string>> action)
@@ -93,11 +93,18 @@ namespace Xenial.Delicious.Beer.Recipes
         public string ArtifactsLocation { get; set; } = Path.GetFullPath($"./artifacts");
 
         /// <summary>
+        /// Gets the webdeploy artifacts location.
+        /// Defaults to Path.GetFullPath($"{ArtifactsLocation}/webdeploy");
+        /// </summary>
+        /// <value>The webdeploy artifacts location.</value>
+        public string WebdeployArtifactsLocation => Path.GetFullPath($"{ArtifactsLocation}/webdeploy");
+
+        /// <summary>
         /// Gets the artifact.
-        /// Value is Path.GetFullPath($"{ArtifactsLocation}/{ProjectName}.zip")
+        /// Value is Path.GetFullPath($"{WebdeployArtifactsLocation}/{ProjectName}.zip")
         /// </summary>
         /// <value>The artifact.</value>
-        public string Artifact => Path.GetFullPath($"{ArtifactsLocation}/webdeploy/{ProjectName}.zip");
+        public string Artifact => Path.GetFullPath($"{WebdeployArtifactsLocation}/{ProjectName}.zip");
 
         /// <summary>
         /// Gets or sets the configuration.
