@@ -72,17 +72,19 @@ namespace Xenial.Build
             return true;
         }
 
+        private const string defaultBranch = "main";
+
         private static async Task<bool> ConfirmBranch()
         {
             var currentBranch = (await ReadAsync("git", "branch --show-current")).Trim();
-            if (!currentBranch.Equals("master", StringComparison.InvariantCultureIgnoreCase))
+            if (!currentBranch.Equals(defaultBranch, StringComparison.InvariantCultureIgnoreCase))
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
 
                 Console.Write($"\tThe current branch you are working on is not ");
 
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.Write("master");
+                Console.Write(defaultBranch);
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.Write($" actually it is ");
                 Console.ForegroundColor = ConsoleColor.Red;
