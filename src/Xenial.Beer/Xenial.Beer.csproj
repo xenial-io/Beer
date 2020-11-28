@@ -5,10 +5,13 @@
     <RootNamespace>Xenial.Delicious.Beer</RootNamespace>
     <PackageId>Xenial.Beer</PackageId>
     <PackageDescription>Beer - Delicious dotnet build tools</PackageDescription>
+    <NoWarn>CA2007;$(NoWarn)</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="BullsEye" Version="3.5" />
+    <PackageReference Include="SimpleExec" Version="6.3" />
   </ItemGroup>
 
 </Project>
