@@ -97,7 +97,7 @@ namespace Xenial.Delicious.Beer.Recipes
         /// Value is Path.GetFullPath($"{ArtifactsLocation}/{ProjectName}.zip")
         /// </summary>
         /// <value>The artifact.</value>
-        public string Artifact => Path.GetFullPath($"{ArtifactsLocation}/{ProjectName}.zip");
+        public string Artifact => Path.GetFullPath($"{ArtifactsLocation}/webdeploy/{ProjectName}.zip");
 
         /// <summary>
         /// Gets or sets the configuration.
