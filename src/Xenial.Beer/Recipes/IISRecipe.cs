@@ -39,7 +39,7 @@ namespace Xenial.Delicious.Beer.Recipes
             Target($"prepare{postfix}", async () => await options.PrepareTask());
 
             Target($"publish{postfix}", DependsOn($"prepare{postfix}"),
-                async () => await RunAsync("dotnet", $"msbuild {options.PathToCsproj} /t:Restore;Build /p:Configuration={options.Configuration} /p:RuntimeIdentifier={options.RuntimeIdentifier} /p:SelfContained={options.SelfContained} /p:PackageAsSingleFile={options.PackageAsSingleFile} /p:DeployOnBuild=true /p:WebPublishMethod=package /p:PublishProfile=Package /v:minimal /p:DesktopBuildPackageLocation={options.Artifact} /p:DeployIisAppPath={options.PackageName} /p:DefaultConnectionString=\"{await options.GetConnectionString()}\" {await assemblyProperties()}")
+                async () => await RunAsync("dotnet", $"msbuild {options.PathToCsproj} /t:Restore;Build /p:Configuration={options.Configuration} /p:RuntimeIdentifier={options.RuntimeIdentifier} /p:SelfContained={options.SelfContained} /p:PackageAsSingleFile={options.PackageAsSingleFile} /p:DeployOnBuild=true /p:WebPublishMethod=package /p:PublishProfile=Package /v:minimal /p:DesktopBuildPackageLocation={options.Artifact} /p:DeployIisAppPath={options.PackageName} {await assemblyProperties()}")
             );
 
             Target($"deploy{postfix}", DependsOn($"publish{postfix}"),
@@ -137,13 +137,6 @@ namespace Xenial.Delicious.Beer.Recipes
         /// </summary>
         /// <value>The assembly properties.</value>
         public string AssemblyProperties { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Gets or sets the get connection string.
-        /// Defaults to Environment.GetEnvironmentVariable("XENIAL_DEFAULTCONNECTIONSTRING")
-        /// </summary>
-        /// <value>The get connection string.</value>
-        public Func<Task<string?>> GetConnectionString { get; set; } = () => Task.FromResult<string?>(Environment.GetEnvironmentVariable("XENIAL_DEFAULTCONNECTIONSTRING"));
 
         /// <summary>
         /// Gets or sets the get webdeploy ip.
