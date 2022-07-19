@@ -51,6 +51,7 @@ internal static partial class Program
         Target("lic", DependsOn("test"),
             async () =>
             {
+                await EnsureTools();
                 var files = Directory.EnumerateFiles(@"src", "*.csproj", SearchOption.AllDirectories).Select(file => new
                 {
                     ProjectName = $"src/{Path.GetFileNameWithoutExtension(file)}/{Path.GetFileName(file)}",
