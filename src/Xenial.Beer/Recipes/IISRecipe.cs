@@ -31,11 +31,26 @@ namespace Xenial.Delicious.Beer.Recipes
                 }
             }
 
-            var version = new Lazy<Task<string>>(async () => (await ReadToolAsync(() => ReadAsync("dotnet", "minver -v e", noEcho: true))).Trim());
-            var branch = new Lazy<Task<string>>(async () => (await ReadAsync("git", "rev-parse --abbrev-ref HEAD", noEcho: true)).Trim());
-            var lastUpdate = new Lazy<Task<string>>(async () => $"{UnixTimeStampToDateTime(await ReadAsync("git", "log -1 --format=%ct", noEcho: true)):yyyy-MM-dd}");
-            var hash = new Lazy<Task<string>>(async () => (await ReadAsync("git", "rev-parse HEAD", noEcho: true)).Trim());
-
+            var version = new Lazy<Task<string>>(async () => (await ReadToolAsync(async () =>
+            {
+                var (output, _) = await ReadAsync("dotnet", "minver -v e");
+                return output;
+            })).Trim());
+            var branch = new Lazy<Task<string>>(async () =>
+            {
+                var (output, _) = await ReadAsync("git", "rev-parse --abbrev-ref HEAD");
+                return output.Trim();
+            });
+            var lastUpdate = new Lazy<Task<string>>(async () =>
+            {
+                var (output, _) = await ReadAsync("git", "log -1 --format=%ct");
+                return $"{UnixTimeStampToDateTime(output):yyyy-MM-dd}";
+            });
+            var hash = new Lazy<Task<string>>(async () =>
+            {
+                var (output, _) = await ReadAsync("git", "rev-parse HEAD");
+                return output.Trim();
+            });
             async Task<string> assemblyProperties() => $"/property:LastUpdate={await lastUpdate.Value} /property:GitBranch={await branch.Value} /property:GitHash={await hash.Value} {options.AssemblyProperties}";
 
             Target($"prepare{postfix}", async () => await options.PrepareTask());
@@ -63,7 +78,7 @@ namespace Xenial.Delicious.Beer.Recipes
                 {
                     return await action();
                 }
-                catch (SimpleExec.NonZeroExitCodeException)
+                catch (SimpleExec.ExitCodeException)
                 {
                     Console.WriteLine("Tool seams missing. Try to restore");
                     await RunAsync("dotnet", "tool restore");

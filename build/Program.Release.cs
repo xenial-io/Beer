@@ -76,7 +76,8 @@ namespace Xenial.Build
 
         private static async Task<bool> ConfirmBranch()
         {
-            var currentBranch = (await ReadAsync("git", "branch --show-current")).Trim();
+            var (output, _) = await ReadAsync("git", "branch --show-current");
+            var currentBranch = output.Trim();
             if (!currentBranch.Equals(defaultBranch, StringComparison.InvariantCultureIgnoreCase))
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
@@ -119,7 +120,7 @@ namespace Xenial.Build
         private static async Task<IEnumerable<string>> ListTags()
         {
             Header("List tags");
-            var tags = await ReadAsync("git", "tag");
+            var (tags, _) = await ReadAsync("git", "tag");
             LogVerbose(tags);
             return tags.Split("\n");
         }
