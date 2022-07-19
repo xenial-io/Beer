@@ -15,7 +15,7 @@ namespace Xenial.Build
             {
                 await RunAsync("dotnet", "format --version");
             }
-            catch (SimpleExec.NonZeroExitCodeException)
+            catch (SimpleExec.ExitCodeException)
             {
                 //Can't find dotnet format, assuming tools are not installed
                 await RunAsync("dotnet", "tool restore");
