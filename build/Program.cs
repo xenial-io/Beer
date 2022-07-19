@@ -30,15 +30,7 @@ namespace Xenial.Build
                 () => RunAsync("dotnet", $"rimraf . -i **/bin/**/*.* -i **/obj/**/*.* -i artifacts/**/*.* -e node_modules/**/*.* -e build/**/*.* -q")
             );
 
-            Target("lint", DependsOn("ensure-tools"),
-                () => RunAsync("dotnet", $"format --exclude ext --check --verbosity diagnostic")
-            );
-
-            Target("format", DependsOn("ensure-tools"),
-                () => RunAsync("dotnet", $"format --exclude ext")
-            );
-
-            Target("restore", DependsOn("lint"),
+            Target("restore",
                 () => RunAsync("dotnet", $"restore {logOptions("restore")}")
             );
 
@@ -48,12 +40,7 @@ namespace Xenial.Build
 
             Target("test", DependsOn("build"), async () =>
             {
-                var (fullFramework, netcore) = FindTfms();
-
-                var tfms = RuntimeInformation
-                            .IsOSPlatform(OSPlatform.Windows)
-                            ? new[] { fullFramework, netcore }
-                            : new[] { netcore };
+                var tfms = new[] { "net5", "net6.0" };
 
                 var tests = tfms
                     .Select(tfm => RunAsync("dotnet", $"run --project test/Xenial.Beer.Tests/Xenial.Beer.Tests.csproj --no-build --no-restore --framework {tfm} -c {Configuration} {properties()}"))
