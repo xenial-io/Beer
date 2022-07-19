@@ -6,10 +6,7 @@
     <LangVersion>preview</LangVersion>
     <Copyright>Copyright © Xenial, Manuel Grundner $([System.DateTime]::Today.ToString('yyyy'))</Copyright>
     <Authors>Xenial, Manuel Grundner</Authors>
-    <FullFrameworkVersion>net462</FullFrameworkVersion>
-    <NetStandardVersion>netstandard2.0</NetStandardVersion>
-    <NetCoreVersion>net5</NetCoreVersion>
-    <TargetFrameworks>$(NetStandardVersion);$(FullFrameworkVersion);$(NetCoreVersion)</TargetFrameworks>
+    <TargetFrameworks>net5;net6.0</TargetFrameworks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <PackageOutputPath>$(MSBuildThisFileDirectory)artifacts\nuget</PackageOutputPath>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -30,18 +27,6 @@
     <Nullable>enable</Nullable>
     <SatelliteResourceLanguages>en-US</SatelliteResourceLanguages>
     <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)CodeFormatting.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(OS)' != 'Windows_NT'">
-    <TargetFrameworks>$(NetStandardVersion)</TargetFrameworks>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(TargetFramework)' == '$(FullFrameworkVersion)'">
-    <DefineConstants>$(DefineConstants);FULL_FRAMEWORK</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(TargetFramework)' == '$(NetCoreVersion)'">
-    <DefineConstants>$(DefineConstants);NET5</DefineConstants>
   </PropertyGroup>
   
   <ItemGroup>
