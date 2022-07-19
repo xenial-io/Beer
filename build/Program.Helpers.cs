@@ -10,17 +10,7 @@ namespace Xenial.Build;
 internal static partial class Program
 {
     public static async Task EnsureTools()
-    {
-        try
-        {
-            await RunAsync("dotnet", "format --version");
-        }
-        catch (SimpleExec.ExitCodeException)
-        {
-            //Can't find dotnet format, assuming tools are not installed
-            await RunAsync("dotnet", "tool restore");
-        }
-    }
+        => await RunAsync("dotnet", "tool restore");
 
     public static string Tabify(string s)
     {
