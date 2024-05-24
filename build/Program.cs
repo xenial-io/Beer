@@ -39,7 +39,7 @@ internal static partial class Program
 
         Target("test", DependsOn("build"), async () =>
         {
-            var tfms = new[] { "net5", "net6.0" };
+            var tfms = new[] { "net6.0", "net7.0", "net8.0" };
 
             var tests = tfms
                 .Select(tfm => RunAsync("dotnet", $"run --project test/Xenial.Beer.Tests/Xenial.Beer.Tests.csproj --no-build --no-restore --framework {tfm} -c {Configuration} {properties()}"))
