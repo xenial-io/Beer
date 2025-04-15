@@ -33,6 +33,10 @@ jobs:
         uses: actions/setup-dotnet@v3.0.1
         with:
           dotnet-version: 8.0.x
+      - name: Setup .NET 9
+        uses: actions/setup-dotnet@v3.0.1
+        with:
+          dotnet-version: 9.0.x
       - name: Build
         run: dotnet run --project build/build.csproj pack
       - uses: actions/upload-artifact@v2
@@ -103,6 +107,10 @@ jobs:
         uses: actions/setup-dotnet@v3.0.1
         with:
           dotnet-version: 8.0.x
+      - name: Setup .NET 9
+        uses: actions/setup-dotnet@v3.0.1
+        with:
+          dotnet-version: 9.0.x
       - name: Publish to nuget.org
         run: dotnet run --project build/build.csproj deploy.nuget
         env:
