@@ -25,7 +25,7 @@ internal static partial class Program
 
         Target("ensure-tools", () => EnsureTools());
 
-        Target("clean", DependsOn("ensure-tools"),
+        Target("clean", dependsOn: ["ensure-tools"],
             () => RunAsync("dotnet", $"rimraf . -i **/bin/**/*.* -i **/obj/**/*.* -i artifacts/**/*.* -e node_modules/**/*.* -e build/**/*.* -q")
         );
 
@@ -33,13 +33,13 @@ internal static partial class Program
             () => RunAsync("dotnet", $"restore {logOptions("restore")}")
         );
 
-        Target("build", DependsOn("restore"),
+        Target("build", dependsOn: ["restore"],
             () => RunAsync("dotnet", $"build --no-restore -c {Configuration} {logOptions("build")} {properties()}")
         );
 
-        Target("test", DependsOn("build"), async () =>
+        Target("test", dependsOn: ["build"], async () =>
         {
-            var tfms = new[] { "net6.0", "net7.0", "net8.0" };
+            var tfms = new[] { "net8.0", "net9.0" };
 
             var tests = tfms
                 .Select(tfm => RunAsync("dotnet", $"run --project test/Xenial.Beer.Tests/Xenial.Beer.Tests.csproj --no-build --no-restore --framework {tfm} -c {Configuration} {properties()}"))
@@ -48,7 +48,7 @@ internal static partial class Program
             await Task.WhenAll(tests);
         });
 
-        Target("lic", DependsOn("test"),
+        Target("lic", dependsOn: ["test"],
             async () =>
             {
                 await EnsureTools();
@@ -64,7 +64,7 @@ internal static partial class Program
             }
         );
 
-        Target("pack", DependsOn("lic"),
+        Target("pack", dependsOn: ["lic"],
             () => RunAsync("dotnet", $"pack Xenial.Beer.sln --no-restore --no-build -c {Configuration} {logOptions("pack.nuget")} {properties()}")
         );
 
@@ -72,11 +72,11 @@ internal static partial class Program
             () => RunAsync("dotnet", "wyam docs -o ../artifacts/docs")
         );
 
-        Target("docs.serve", DependsOn("ensure-tools"),
+        Target("docs.serve", dependsOn: ["ensure-tools"],
             () => RunAsync("dotnet", "wyam docs -o ../artifacts/docs -w -p")
         );
 
-        Target("deploy.nuget", DependsOn("ensure-tools"), async () =>
+        Target("deploy.nuget", dependsOn: ["ensure-tools"], async () =>
         {
             var files = Directory.EnumerateFiles("artifacts/nuget", "*.nupkg");
 
@@ -92,7 +92,7 @@ internal static partial class Program
             () => Release()
         );
 
-        Target("default", DependsOn("test"));
+        Target("default", dependsOn: ["test"]);
 
         await RunTargetsAndExitAsync(args);
     }

@@ -57,18 +57,18 @@ namespace Xenial.Delicious.Beer.Recipes
 
             if (options.DotnetCore)
             {
-                Target($"publish{postfix}", DependsOn($"prepare{postfix}"),
+                Target($"publish{postfix}", dependsOn: [$"prepare{postfix}"],
                     async () => await RunAsync("dotnet", $"build {options.PathToCsproj} /p:Configuration={options.Configuration} /p:RuntimeIdentifier={options.RuntimeIdentifier} /p:SelfContained={options.SelfContained} /p:PackageAsSingleFile={options.PackageAsSingleFile} /p:DeployOnBuild=true /p:WebPublishMethod=package /p:PublishProfile=Package /v:minimal /p:DesktopBuildPackageLocation={options.Artifact} /p:DeployIisAppPath={options.PackageName} {await assemblyProperties()}")
                 );
             }
             else
             {
-                Target($"publish{postfix}", DependsOn($"prepare{postfix}"),
+                Target($"publish{postfix}", dependsOn: [$"prepare{postfix}"],
                     async () => await RunAsync("dotnet", $"msbuild {options.PathToCsproj} /t:Restore;Build /p:Configuration={options.Configuration} /p:RuntimeIdentifier={options.RuntimeIdentifier} /p:SelfContained={options.SelfContained} /p:PackageAsSingleFile={options.PackageAsSingleFile} /p:DeployOnBuild=true /p:WebPublishMethod=package /p:PublishProfile=Package /v:minimal /p:DesktopBuildPackageLocation={options.Artifact} /p:DeployIisAppPath={options.PackageName} {await assemblyProperties()}")
                 );
             }
 
-            Target($"deploy{postfix}", DependsOn($"publish{postfix}"),
+            Target($"deploy{postfix}", dependsOn: [$"publish{postfix}"],
                 async () => await RunAsync("cmd.exe", $"/C {options.ProjectName}.deploy.cmd /Y /M:{await options.GetWebdeployIP()} /U:{await options.GetWebdeployUser()} /P:{await options.GetWebdeployPass()} -allowUntrusted -enableRule:AppOffline", workingDirectory: options.WebdeployArtifactsLocation)
             );
 
